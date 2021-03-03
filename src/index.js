@@ -1,17 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+class App extends React.Component {
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  constructor(props) {
+    super(props);
+    // THIS IS THE ONLY TIME we to direct assignment
+    // to this.state
+    this.state = {
+      lat: null
+    };
+
+    window.navigation.geolocation.getCurrentPosition(
+      position => {
+        // we called setstate
+        this.setState({
+          lat: position.coords.latitude
+        });
+      },
+      err => console.log(err)
+    );
+  }
+
+  //React says we have to define render
+  render() {
+
+    return <div>Latitude:{this.state.lat}</div>
+  }
+}
+
+ReactDOM.render(<App />, document.querySelector('#root'));
